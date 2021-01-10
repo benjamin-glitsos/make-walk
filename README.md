@@ -17,25 +17,25 @@ Supported shells:
 
 This program is a single bash script which you can download, put into your PATH and then alias in your `.bashrc`:
 
-```
-git clone git@github.com:benjamin-glitsos/makewalk.git
-cd makewalk/
-mv makewalk.sh ~/bin/makewalk.sh
-cd ..
-rm -r makewalk/
+```console
+$ git clone git@github.com:benjamin-glitsos/makewalk.git
+$ cd makewalk/
+$ mv makewalk.sh ~/bin/makewalk.sh
+$ cd ..
+$ rm -r makewalk/
 ```
 
 Then in your `.bashrc`:
 
-```
+```bash
 source makewalk.sh;
 alias m="makewalk";
 ```
 
 ## Usage
 
-```
-m new folder/second folder/new file.txt,.dotfile example,third file.txt
+```console
+$ m new folder/second folder/new file.txt,.dotfile example,third file.txt
 
 # Output:
 # $ mkdir -p new-folder/second-folder && cd new-folder/second-folder
@@ -50,7 +50,7 @@ Most parts of this application are configurable, and there are even some additio
 
 Here are all of the environment variables that you can configure, except these examples are set to their default values for your reference:
 
-```
+```bash
 export MAKEWALK_PATH_JOINER="-"
 export MAKEWALK_FILE_DELIMITER=",";
 
