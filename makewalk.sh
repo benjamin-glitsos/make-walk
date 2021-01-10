@@ -1,5 +1,8 @@
 #!/usr/bin/env bash
 
+# TODO: not_empty_path not working
+# TODO: join_by_separator no longer working?
+
 declare -rf makewalk() {
     # Environment Variables --------------------
 
@@ -21,7 +24,6 @@ declare -rf makewalk() {
     # Utilities --------------------
 
     declare -rf not_empty_path() {
-    # TODO: not working
         if [[ $* != $empty_path ]]; then
             echo "ne"
             return;
@@ -53,7 +55,8 @@ declare -rf makewalk() {
     declare -rf echo_and_run() {
         declare -r shell_symbol=`colorise $cyan \$`;
         declare -r shell_command=`colorise $purple $*`;
-        echo "$shell_symbol $shell_command"; eval $*;
+        echo "$shell_symbol $shell_command";
+        eval $*;
     }
 
     # Main --------------------
