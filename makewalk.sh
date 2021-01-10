@@ -7,7 +7,7 @@ function makewalk {
     MAKEWALK_FILE_DELIMITER="${MAKEWALK_FILE_DELIMITER:=,}";
     MAKEWALK_FILE_OPENER="${MAKEWALK_FILE_OPENER:=xdg-open}";
     MAKEWALK_DISABLE_PATH_JOINING="${MAKEWALK_DISABLE_PATH_JOINING:=no}";
-    MAKEWALK_DISABLE_FILE_DELIMITING="${MAKEWALK_DISABLE_PATH_JOINING:=no}";
+    MAKEWALK_DISABLE_FILE_DELIMITING="${MAKEWALK_DISABLE_FILE_DELIMITING:=no}";
     MAKEWALK_DISABLE_PATH_CD="${MAKEWALK_DISABLE_PATH_CD:=no}";
     MAKEWALK_DISABLE_FILE_OPEN="${MAKEWALK_DISABLE_FILE_OPEN:=no}";
     MAKEWALK_DISABLE_CONSOLE_PRINT="${MAKEWALK_DISABLE_CONSOLE_PRINT:=no}";
@@ -108,9 +108,8 @@ function makewalk {
             fi
 
             if not_empty_path $filenames; then
-                split_by_delimiter $filenames;
-                for filename in "${SPLIT_BY_FILE_DELIMITER_ARRAY[@]}"
-                do
+                function filename_run {
+                    declare -r filename=$*;
                     declare -r touchFilename="touch $filename";
                     declare -r openFilename="$MAKEWALK_FILE_OPENER $filename";
 
@@ -119,7 +118,18 @@ function makewalk {
                     else
                         echo_and_run "$touchFilename && $openFilename";
                     fi
-                done
+                }
+
+                if is_yes $MAKEWALK_DISABLE_FILE_DELIMITING; then
+                    declare -r filename=$filenames;
+                    filename_run $filename;
+                else
+                    split_by_delimiter $filenames;
+                    for filename in "${SPLIT_BY_FILE_DELIMITER_ARRAY[@]}"
+                    do
+                        filename_run $filename;
+                    done
+                fi
             fi
 
             if is_yes $MAKEWALK_DISABLE_PATH_CD; then
