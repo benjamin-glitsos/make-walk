@@ -85,6 +85,6 @@ export MAKEWALK_COLOR_ERROR="0;31";
 
 I personally use the following configuration:
 
-```
+```bash
 export MAKEWALK_FILE_OPEN_COMMAND="vimer";
 ```
