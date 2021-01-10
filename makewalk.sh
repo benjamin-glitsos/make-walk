@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 
-# TODO: not_empty_path not working
-
 function makewalk {
     # Environment Variables --------------------
 
