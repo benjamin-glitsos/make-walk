@@ -35,11 +35,13 @@ function makewalk {
     }
 
     function join_by_separator {
-        declare IFS=$MAKEWALK_SEPARATOR; echo "$*";
+        declare IFS=$MAKEWALK_SEPARATOR;
+        echo "$*";
     }
 
     function split_by_delimiter {
-        IFS="$MAKEWALK_DELIMITER" read -r -a SPLIT_BY_DELIMITER_ARRAY <<< $*;
+        declare IFS="$MAKEWALK_DELIMITER";
+        read -ra SPLIT_BY_DELIMITER_ARRAY <<< $*;
     }
 
     function colorise {
