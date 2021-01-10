@@ -39,7 +39,9 @@ declare -rf makewalk() {
     }
 
     declare -rf echo_and_run() {
-        echo "$cyan\$$nocolor$purple $* $nocolor"; eval $*;
+        declare -r shell_symbol="$cyan\$$nocolor"
+        declare -r shell_command="$purple$*$nocolor"
+        echo "$shell_symbol $shell_command"; eval $*;
     }
 
     # Main --------------------
