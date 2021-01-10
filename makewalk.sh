@@ -7,6 +7,7 @@ function makewalk {
     MAKEWALK_DELIMITER="${MAKEWALK_DELIMITER:=,}";
     MAKEWALK_OPENER="${MAKEWALK_OPENER:=xdg-open}";
     MAKEWALK_DISABLE_CD="${MAKEWALK_DISABLE_CD:=no}";
+    MAKEWALK_DISABLE_OPEN="${MAKEWALK_DISABLE_OPEN:=no}";
 
     # Constants --------------------
 
@@ -86,7 +87,14 @@ function makewalk {
             split_by_delimiter $filenames;
             for filename in "${SPLIT_BY_DELIMITER_ARRAY[@]}"
             do
-                echo_and_run "touch $filename && $MAKEWALK_OPENER $filename";
+                declare -r touchFilename="touch $filename";
+                declare -r openFilename="$MAKEWALK_OPENER $filename";
+
+                if is_yes $MAKEWALK_DISABLE_OPEN; then
+                    echo_and_run "$touchFilename"
+                else
+                    echo_and_run "$touchFilename && $openFilename"
+                fi
             done
         fi
 
