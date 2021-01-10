@@ -3,7 +3,7 @@
 function makewalk {
     # Environment Variables --------------------
 
-    MAKEWALK_DIRECTORY_JOINER="${MAKEWALK_DIRECTORY_JOINER:=-}"
+    MAKEWALK_PATH_JOINER="${MAKEWALK_PATH_JOINER:=-}"
     MAKEWALK_FILE_DELIMITER="${MAKEWALK_FILE_DELIMITER:=,}";
 
     MAKEWALK_DIRECTORY_MAKE_COMMAND="${MAKEWALK_DIRECTORY_MAKE_COMMAND:=mkdir -p}";
@@ -61,7 +61,7 @@ function makewalk {
     }
 
     function join_by_separator {
-        declare IFS=$MAKEWALK_DIRECTORY_JOINER;
+        declare IFS=$MAKEWALK_PATH_JOINER;
         echo "$*";
     }
 

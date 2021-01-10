@@ -15,6 +15,7 @@ Then use it like this:
 ```
 m new folder/second folder/new file.txt,.dotfile example,third file.txt
 
+# Output:
 # $ mkdir -p new-folder/second-folder && cd new-folder/second-folder
 # $ touch new-file.txt && xdg-open new-file.txt
 # $ touch .dotfile-example && xdg-open .dotfile-example
@@ -27,7 +28,7 @@ Most parts of this application are configurable, and there are even some additio
 Here are all of the environment variables that you can configure, except these examples are set to their default values for your reference:
 
 ```
-export MAKEWALK_DIRECTORY_JOINER="-"
+export MAKEWALK_PATH_JOINER="-"
 export MAKEWALK_FILE_DELIMITER=",";
 
 export MAKEWALK_DIRECTORY_MAKE_COMMAND="mkdir -p";
