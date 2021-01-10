@@ -5,10 +5,14 @@ function makewalk {
 
     MAKEWALK_PATH_JOINER="${MAKEWALK_PATH_JOINER:=-}"
     MAKEWALK_FILE_DELIMITER="${MAKEWALK_FILE_DELIMITER:=,}";
-    MAKEWALK_FILE_OPENER="${MAKEWALK_FILE_OPENER:=xdg-open}";
+    MAKEWALK_FILE_MAKE_COMMAND="${MAKEWALK_FILE_MAKE_COMMAND:=touch}";
+    MAKEWALK_FILE_OPEN_COMMAND="${MAKEWALK_FILE_OPEN_COMMAND:=xdg-open}";
+    MAKEWALK_PATH_MAKE_COMMAND="${MAKEWALK_PATH_MAKE_COMMAND:=mkdir -p}";
+    MAKEWALK_PATH_ENTER_COMMAND="${MAKEWALK_PATH_ENTER_COMMAND:=cd}";
     MAKEWALK_DISABLE_PATH_JOINING="${MAKEWALK_DISABLE_PATH_JOINING:=no}";
     MAKEWALK_DISABLE_FILE_DELIMITING="${MAKEWALK_DISABLE_FILE_DELIMITING:=no}";
-    MAKEWALK_DISABLE_PATH_CD="${MAKEWALK_DISABLE_PATH_CD:=no}";
+    MAKEWALK_DISABLE_PATH_MAKE="${MAKEWALK_DISABLE_PATH_MAKE:=no}";
+    MAKEWALK_DISABLE_PATH_ENTER="${MAKEWALK_DISABLE_PATH_ENTER:=no}";
     MAKEWALK_DISABLE_FILE_OPEN="${MAKEWALK_DISABLE_FILE_OPEN:=no}";
     MAKEWALK_DISABLE_CONSOLE_PRINT="${MAKEWALK_DISABLE_CONSOLE_PRINT:=no}";
     MAKEWALK_DISABLE_CONSOLE_COLORS="${MAKEWALK_DISABLE_CONSOLE_COLORS:=no}";
@@ -104,19 +108,26 @@ function makewalk {
             fi
 
             if not_empty_path $dirpath; then
-                echo_and_run "mkdir -p $dirpath && cd $dirpath";
+                declare -r make_path="$MAKEWALK_PATH_MAKE_COMMAND $dirpath"
+                declare -r enter_path="$MAKEWALK_PATH_ENTER_COMMAND $dirpath"
+
+                if is_yes $MAKEWALK_DISABLE_PATH_MAKE; then
+                    echo_and_run "$enter_path";
+                else
+                    echo_and_run "$make_path && $enter_path";
+                fi
             fi
 
             if not_empty_path $filenames; then
                 function filename_run {
                     declare -r filename=$*;
-                    declare -r touchFilename="touch $filename";
-                    declare -r openFilename="$MAKEWALK_FILE_OPENER $filename";
+                    declare -r make_file="$MAKEWALK_FILE_MAKE_COMMAND $filename";
+                    declare -r open_file="$MAKEWALK_FILE_OPEN_COMMAND $filename";
 
                     if is_yes $MAKEWALK_DISABLE_FILE_OPEN; then
-                        echo_and_run "$touchFilename";
+                        echo_and_run "$make_file";
                     else
-                        echo_and_run "$touchFilename && $openFilename";
+                        echo_and_run "$make_file && $open_file";
                     fi
                 }
 
@@ -132,7 +143,7 @@ function makewalk {
                 fi
             fi
 
-            if is_yes $MAKEWALK_DISABLE_PATH_CD; then
+            if is_yes $MAKEWALK_DISABLE_PATH_ENTER; then
                 echo_and_run "cd $startpath"
             fi
         else
