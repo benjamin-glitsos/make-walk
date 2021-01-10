@@ -6,7 +6,7 @@ function makewalk {
     MAKEWALK_SEPARATOR="${MAKEWALK_SEPARATOR:=-}"
     MAKEWALK_DELIMITER="${MAKEWALK_DELIMITER:=,}";
     MAKEWALK_OPENER="${MAKEWALK_OPENER:=xdg-open}";
-    MAKEWALK_CD="${MAKEWALK_CD:=yes}";
+    MAKEWALK_DISABLE_CD="${MAKEWALK_DISABLE_CD:=no}";
 
     # Constants --------------------
 
@@ -35,8 +35,8 @@ function makewalk {
         false;
     }
 
-    function not_yes {
-        if [[ $* != "yes" ]]; then
+    function is_yes {
+        if [[ $* == "yes" ]]; then
             return;
         fi
         false;
@@ -90,7 +90,7 @@ function makewalk {
             done
         fi
 
-        if not_yes $MAKEWALK_CD; then
+        if is_yes $MAKEWALK_DISABLE_CD; then
             echo_and_run "cd $startpath"
         fi
     else
