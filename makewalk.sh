@@ -1,12 +1,14 @@
 #!/bin/bash
 
+readonly separator="-"
+
 function join_by_separator() {
-    local IFS="-"; echo "$*";
+    local IFS=$separator; echo "$*";
 }
 
-fullpath=`join_by_separator "$@"`
-filename=`basename $fullpath`
-dirpath=`dirname $fullpath`
+readonly fullpath=`join_by_separator "$@"`
+readonly filename=`basename $fullpath`
+readonly dirpath=`dirname $fullpath`
 
 echo $filename
 echo $dirpath
