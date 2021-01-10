@@ -8,7 +8,6 @@ declare -rf makewalk() {
 
     # Colors --------------------
 
-    declare -r blue="\033[0;34m"
     declare -r purple="\033[0;35m"
     declare -r nocolor="\033[0m"
 
@@ -26,8 +25,7 @@ declare -rf makewalk() {
     }
 
     declare -rf echo_and_run() {
-        declare -r color=$1; shift;
-        echo "\$$color $* $nocolor"; eval $*;
+        echo "\$$purple $* $nocolor"; eval $*;
     }
 
     # Main --------------------
@@ -43,12 +41,10 @@ declare -rf makewalk() {
     # TODO: check if path ends in slash and if so, append the filename to the dirpath and replace filename with "."
     # TODO: split filenames by comma then use a for loop to echo_and_run a touch and opener command for each
     if not_empty_path $dirpath; then
-        echo_and_run $blue "mkdir -p $dirpath"
-        echo_and_run $blue "cd $dirpath"
+        echo_and_run "mkdir -p $dirpath && cd $dirpath"
     fi
 
     if not_empty_path $filename; then
-        echo_and_run $purple "touch $filename"
-        echo_and_run $purple "$opener $filename"
+        echo_and_run "touch $filename && $opener $filename"
     fi
 }
