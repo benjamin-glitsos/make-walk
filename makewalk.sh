@@ -3,8 +3,10 @@
 declare -rf makewalk() {
     # Settings --------------------
 
+    # TODO: make these environment variables
     declare -r separator="-";
-    declare -r delimiter=",";
+    declare -r path_delimiter=".";
+    declare -r file_delimiter=",";
     declare -r opener="xdg-open";
 
     # Constants --------------------
@@ -37,9 +39,12 @@ declare -rf makewalk() {
         declare IFS=$separator; echo $*;
     }
 
-    declare -rf split_by_comma() {
+    declare -rf split_by_delimiter() {
+        declare -r delimiter=$1; shift;
         echo $* | tr $delimiter "\n";
     }
+
+    # TODO: create function that surrounds a string in the desired colour
 
     declare -rf echo_and_run() {
         declare -r shell_symbol="$cyan\$$nocolor";
@@ -49,24 +54,29 @@ declare -rf makewalk() {
 
     # Main --------------------
 
-    declare -r fullpath=`join_by_separator "$@"`;
+    declare -r fullpaths=`join_by_separator "$@"`;
 
-    if does_end_with_slash $fullpath; then
-        declare -r filenames=$empty_path;
-        declare -r dirpath=$fullpath;
-    else
-        declare -r filenames=`basename $fullpath`;
-        declare -r dirpath=`dirname $fullpath`;
-    fi
+    if not_empty_path $fullpaths || [ -z "$fullpaths" ]; then
+        for fullpath in `split_by_delimiter $path_delimiter $fullpaths`
 
-    if not_empty_path $dirpath; then
-        echo_and_run "mkdir -p $dirpath && cd $dirpath";
-    fi
+            if does_end_with_slash $fullpath; then
+                declare -r filenames=$empty_path;
+                declare -r dirpath=$fullpath;
+            else
+                declare -r filenames=`basename $fullpath`;
+                declare -r dirpath=`dirname $fullpath`;
+            fi
 
-    if not_empty_path $filenames; then
-        for filename in `split_by_comma $filenames`
-        do
-            echo_and_run "touch $filename && $opener $filename";
-        done
+            if not_empty_path $dirpath; then
+                echo_and_run "mkdir -p $dirpath && cd $dirpath";
+            fi
+
+            if not_empty_path $filenames; then
+                for filename in `split_by_delimiter $file_delimiter $filenames`
+                do
+                    echo_and_run "touch $filename && $opener $filename";
+                done
+            fi
+    # TODO: echo red error message in an else clause here
     fi
 }
