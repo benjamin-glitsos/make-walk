@@ -82,3 +82,9 @@ export MAKEWALK_COLOR_BODY="0;35";
 export MAKEWALK_COLOR_HIGHLIGHT="0;36";
 export MAKEWALK_COLOR_ERROR="0;31";
 ```
+
+I personally use the following configuration:
+
+```
+export MAKEWALK_FILE_OPEN_COMMAND="vimer";
+```
