@@ -48,6 +48,7 @@ m new folder/second folder/new file.txt,.dotfile example,another file.txt
 # These files and folders were created:
 # new-folder
 # └── second-folder
+#    ├── .dotfile-example
 #    ├── another-file.txt
 #    └── new-file.txt
 ```
