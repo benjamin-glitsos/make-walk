@@ -43,11 +43,14 @@ declare -rf makewalk() {
         echo $* | tr $delimiter "\n";
     }
 
-    # TODO: create function that surrounds a string in the desired colour
+    declare -rf colorise() {
+        declare -r color=$1; shift;
+        echo "$color$*$nocolor"
+    }
 
     declare -rf echo_and_run() {
-        declare -r shell_symbol="$cyan\$$nocolor";
-        declare -r shell_command="$purple$*$nocolor";
+        declare -r shell_symbol=`colorise $cyan \$`;
+        declare -r shell_command=`colorise $purple $*`;
         echo "$shell_symbol $shell_command"; eval $*;
     }
 
@@ -55,7 +58,7 @@ declare -rf makewalk() {
 
     declare -r fullpath=`join_by_separator "$@"`;
 
-    if not_empty_path $fullpaths || [ -z "$fullpaths" ]; then
+    if not_empty_path $fullpaths && [ -z "$fullpaths" ]; then
         if does_end_with_slash $fullpath; then
             declare -r filenames=$empty_path;
             declare -r dirpath=$fullpath;
@@ -74,6 +77,8 @@ declare -rf makewalk() {
                 echo_and_run "touch $filename && $opener $filename";
             done
         fi
-    # TODO: echo red error message in an else clause here
+    else
+        echo `colorise $red "No path provided."`
+        exit 1
     fi
 }
