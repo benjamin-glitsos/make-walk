@@ -2,15 +2,15 @@
 
 A single command that combines `mkdir -p`, `touch`, `cd`, `xdg-open`, `ls` and joins filenames with a separator. It is designed to be very fast and also highly configurable.
 
-## Usage
+## Installation
 
-Firstly, it's convenient to set this alias in your `.bashrc`:
+It's convenient add this alias to your `.bashrc`:
 
 ```
 alias m="makewalk"
 ```
 
-Then use it like this:
+## Usage
 
 ```
 m new folder/second folder/new file.txt,.dotfile example,third file.txt
