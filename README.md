@@ -4,10 +4,21 @@ A single command that combines `mkdir -p`, `touch`, `cd`, `xdg-open`, `ls` and j
 
 ## Installation
 
-It's convenient add this alias to your `.bashrc`:
+This program is a single bash script which you can download, put into your PATH and then alias in your `.bashrc`:
 
 ```
-alias m="makewalk"
+git clone git@github.com:benjamin-glitsos/makewalk.git
+cd makewalk/
+mv makewalk.sh ~/bin/makewalk.sh
+cd ..
+rm -r makewalk/
+```
+
+Then in your `.bashrc`:
+
+```
+source makewalk.sh;
+alias m="makewalk";
 ```
 
 ## Usage
