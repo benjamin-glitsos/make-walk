@@ -1,18 +1,17 @@
 #!/usr/bin/env bash
 
-# TODO: disable delimiter env variable
-
 function makewalk {
     # Environment Variables --------------------
 
-    MAKEWALK_JOINER="${MAKEWALK_JOINER:=-}"
-    MAKEWALK_DELIMITER="${MAKEWALK_DELIMITER:=,}";
-    MAKEWALK_OPENER="${MAKEWALK_OPENER:=xdg-open}";
-    MAKEWALK_DISABLE_JOINING="${MAKEWALK_DISABLE_JOINING:=no}";
-    MAKEWALK_DISABLE_CD="${MAKEWALK_DISABLE_CD:=no}";
-    MAKEWALK_DISABLE_OPEN="${MAKEWALK_DISABLE_OPEN:=no}";
-    MAKEWALK_DISABLE_PRINT="${MAKEWALK_DISABLE_PRINT:=no}";
-    MAKEWALK_DISABLE_COLORS="${MAKEWALK_DISABLE_COLORS:=no}";
+    MAKEWALK_PATH_JOINER="${MAKEWALK_PATH_JOINER:=-}"
+    MAKEWALK_FILE_DELIMITER="${MAKEWALK_FILE_DELIMITER:=,}";
+    MAKEWALK_FILE_OPENER="${MAKEWALK_FILE_OPENER:=xdg-open}";
+    MAKEWALK_DISABLE_PATH_JOINING="${MAKEWALK_DISABLE_PATH_JOINING:=no}";
+    MAKEWALK_DISABLE_FILE_DELIMITING="${MAKEWALK_DISABLE_PATH_JOINING:=no}";
+    MAKEWALK_DISABLE_PATH_CD="${MAKEWALK_DISABLE_PATH_CD:=no}";
+    MAKEWALK_DISABLE_FILE_OPEN="${MAKEWALK_DISABLE_FILE_OPEN:=no}";
+    MAKEWALK_DISABLE_CONSOLE_PRINT="${MAKEWALK_DISABLE_CONSOLE_PRINT:=no}";
+    MAKEWALK_DISABLE_CONSOLE_COLORS="${MAKEWALK_DISABLE_CONSOLE_COLORS:=no}";
     MAKEWALK_COLOR_BODY="${MAKEWALK_COLOR_BODY:=0;35}";
     MAKEWALK_COLOR_HIGHLIGHT="${MAKEWALK_COLOR_HIGHLIGHT:=0;36}";
     MAKEWALK_COLOR_ERROR="${MAKEWALK_COLOR_ERROR:=0;31}";
@@ -52,13 +51,13 @@ function makewalk {
     }
 
     function join_by_separator {
-        declare IFS=$MAKEWALK_JOINER;
+        declare IFS=$MAKEWALK_PATH_JOINER;
         echo "$*";
     }
 
     function split_by_delimiter {
-        declare IFS="$MAKEWALK_DELIMITER";
-        read -ra SPLIT_BY_DELIMITER_ARRAY <<< $*;
+        declare IFS="$MAKEWALK_FILE_DELIMITER";
+        read -ra SPLIT_BY_FILE_DELIMITER_ARRAY <<< $*;
     }
 
     function create_color {
@@ -67,7 +66,7 @@ function makewalk {
 
     function colorise {
         declare -r color=$1; shift;
-        if is_yes $MAKEWALK_DISABLE_COLORS; then
+        if is_yes $MAKEWALK_DISABLE_CONSOLE_COLORS; then
             echo "$*";
         else
             echo "$color$*$nocolor";
@@ -77,7 +76,7 @@ function makewalk {
     function echo_and_run {
         declare -r shell_symbol=`colorise $highlight_color \$`;
         declare -r shell_command=`colorise $body_color $*`;
-        if not_yes $MAKEWALK_DISABLE_PRINT; then
+        if not_yes $MAKEWALK_DISABLE_CONSOLE_PRINT; then
             echo "$shell_symbol $shell_command";
         fi
         eval $*;
@@ -110,12 +109,12 @@ function makewalk {
 
             if not_empty_path $filenames; then
                 split_by_delimiter $filenames;
-                for filename in "${SPLIT_BY_DELIMITER_ARRAY[@]}"
+                for filename in "${SPLIT_BY_FILE_DELIMITER_ARRAY[@]}"
                 do
                     declare -r touchFilename="touch $filename";
-                    declare -r openFilename="$MAKEWALK_OPENER $filename";
+                    declare -r openFilename="$MAKEWALK_FILE_OPENER $filename";
 
-                    if is_yes $MAKEWALK_DISABLE_OPEN; then
+                    if is_yes $MAKEWALK_DISABLE_FILE_OPEN; then
                         echo_and_run "$touchFilename";
                     else
                         echo_and_run "$touchFilename && $openFilename";
@@ -123,7 +122,7 @@ function makewalk {
                 done
             fi
 
-            if is_yes $MAKEWALK_DISABLE_CD; then
+            if is_yes $MAKEWALK_DISABLE_PATH_CD; then
                 echo_and_run "cd $startpath"
             fi
         else
@@ -132,7 +131,7 @@ function makewalk {
         fi
     }
 
-    if is_yes $MAKEWALK_DISABLE_JOINING; then
+    if is_yes $MAKEWALK_DISABLE_PATH_JOINING; then
         for full_path in "$@"
         do
             main_run $full_path;
