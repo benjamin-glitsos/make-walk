@@ -2,6 +2,17 @@
 
 A single command that combines `mkdir -p`, `touch`, `cd`, `xdg-open`, `ls` and joins filenames with a separator. It is designed to be very fast and also highly configurable.
 
+## Requirements
+
+Supported operating systems:
+
+* Linux
+
+Supported shells:
+
+* Bash
+* Zsh
+
 ## Installation
 
 This program is a single bash script which you can download, put into your PATH and then alias in your `.bashrc`:

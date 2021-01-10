@@ -67,7 +67,11 @@ function makewalk {
 
     function split_by_delimiter {
         declare IFS="$MAKEWALK_FILE_DELIMITER";
-        read -ra SPLIT_BY_FILE_DELIMITER_ARRAY <<< $*;
+        if [ -n "$ZSH_VERSION" ]; then
+           read -rA SPLIT_BY_FILE_DELIMITER_ARRAY <<< $*;
+        else
+           read -ra SPLIT_BY_FILE_DELIMITER_ARRAY <<< $*;
+        fi
     }
 
     function create_color {
