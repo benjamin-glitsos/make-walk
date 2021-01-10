@@ -44,6 +44,12 @@ m new folder/second folder/new file.txt,.dotfile example,another file.txt
 # $ touch new-file.txt && xdg-open new-file.txt
 # $ touch .dotfile-example && xdg-open .dotfile-example
 # $ touch another-file.txt && xdg-open another-file.txt
+
+# These files and folders were created:
+# new-folder
+# └── second-folder
+#    ├── another-file.txt
+#    └── new-file.txt
 ```
 
 ## Configuration
