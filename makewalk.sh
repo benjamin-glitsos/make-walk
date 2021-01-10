@@ -4,7 +4,7 @@ declare -rf makewalk() {
     # Settings --------------------
 
     declare -r separator="-"
-    declare -r opener="vimer"
+    declare -r opener="xdg-open"
 
     # Colors --------------------
 
