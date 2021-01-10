@@ -18,6 +18,13 @@ declare -rf makewalk() {
         declare IFS=$separator; echo "$*";
     }
 
+    declare -rf not_empty_path() {
+        if [[ "$*" != "." ]]; then
+            return
+        fi
+        false
+    }
+
     declare -rf echo_and_run() {
         declare -r color=$1; shift;
         echo "\$$color $* $nocolor"; eval $*;
@@ -35,12 +42,12 @@ declare -rf makewalk() {
 
     # TODO: check if path ends in slash and if so, append the filename to the dirpath and replace filename with "."
     # TODO: split filenames by comma then use a for loop to echo_and_run a touch and opener command for each
-    if [ $dirpath != "." ]; then # TODO: make boolean function that does this check
+    if not_empty_path $dirpath; then
         echo_and_run $blue "mkdir -p $dirpath"
         echo_and_run $blue "cd $dirpath"
     fi
 
-    if [ $filename != "." ]; then
+    if not_empty_path $filename; then
         echo_and_run $purple "touch $filename"
         echo_and_run $purple "$opener $filename"
     fi
