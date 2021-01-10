@@ -37,13 +37,13 @@ alias m="makewalk";
 ## Usage
 
 ```bash
-m new folder/second folder/new file.txt,.dotfile example,third file.txt
+m new folder/second folder/new file.txt,.dotfile example,another file.txt
 
 # Output:
 # $ mkdir -p new-folder/second-folder && cd new-folder/second-folder
 # $ touch new-file.txt && xdg-open new-file.txt
 # $ touch .dotfile-example && xdg-open .dotfile-example
-# $ touch third-file.txt && xdg-open third-file.txt
+# $ touch another-file.txt && xdg-open another-file.txt
 ```
 
 ## Configuration
