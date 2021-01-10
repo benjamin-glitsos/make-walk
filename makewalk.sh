@@ -1,9 +1,10 @@
 #!/usr/bin/env bash
 
+# TODO: make this work using bash rather than zsh
 # TODO: not_empty_path not working
 # TODO: join_by_separator no longer working?
 
-declare -rf makewalk() {
+declare -rf makewalk {
     # Environment Variables --------------------
 
     MAKEWALK_SEPARATOR="${MAKEWALK_SEPARATOR:=-}"
@@ -23,7 +24,7 @@ declare -rf makewalk() {
 
     # Utilities --------------------
 
-    declare -rf not_empty_path() {
+    declare -rf not_empty_path {
         if [[ $* != $empty_path ]]; then
             echo "ne"
             return;
@@ -31,29 +32,29 @@ declare -rf makewalk() {
         false
     }
 
-    declare -rf does_end_with_slash() {
+    declare -rf does_end_with_slash {
         if [[ $* =~ "/$" ]]; then
             return;
         fi
         false;
     }
 
-    declare -rf join_by_separator() {
+    declare -rf join_by_separator {
         declare IFS=$MAKEWALK_SEPARATOR; echo $*;
     }
 
-    declare -rf split_by_delimiter() {
+    declare -rf split_by_delimiter {
         declare IFS=$1; shift;
         read -a array <<< $*;
         return $array;
     }
 
-    declare -rf colorise() {
+    declare -rf colorise {
         declare -r color=$1; shift;
         echo "$color$*$nocolor"
     }
 
-    declare -rf echo_and_run() {
+    declare -rf echo_and_run {
         declare -r shell_symbol=`colorise $cyan \$`;
         declare -r shell_command=`colorise $purple $*`;
         echo "$shell_symbol $shell_command";
