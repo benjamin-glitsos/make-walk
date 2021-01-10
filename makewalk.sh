@@ -1,11 +1,14 @@
 #!/usr/bin/env bash
 
+# TODO: disable delimiter env variable
+
 function makewalk {
     # Environment Variables --------------------
 
-    MAKEWALK_SEPARATOR="${MAKEWALK_SEPARATOR:=-}"
+    MAKEWALK_JOINER="${MAKEWALK_JOINER:=-}"
     MAKEWALK_DELIMITER="${MAKEWALK_DELIMITER:=,}";
     MAKEWALK_OPENER="${MAKEWALK_OPENER:=xdg-open}";
+    MAKEWALK_DISABLE_JOINING="${MAKEWALK_DISABLE_JOINING:=no}";
     MAKEWALK_DISABLE_CD="${MAKEWALK_DISABLE_CD:=no}";
     MAKEWALK_DISABLE_OPEN="${MAKEWALK_DISABLE_OPEN:=no}";
     MAKEWALK_DISABLE_PRINT="${MAKEWALK_DISABLE_PRINT:=no}";
@@ -49,7 +52,7 @@ function makewalk {
     }
 
     function join_by_separator {
-        declare IFS=$MAKEWALK_SEPARATOR;
+        declare IFS=$MAKEWALK_JOINER;
         echo "$*";
     }
 
@@ -89,42 +92,53 @@ function makewalk {
 
     # Main --------------------
 
-    declare -r fullpath=`join_by_separator "$@"`;
     declare -r startpath=`pwd`
 
-    if not_empty_path "$fullpath" && [[ ! -z "$fullpath" ]]; then
-        if does_end_with_slash $fullpath; then
-            declare -r filenames=$empty_path;
-            declare -r dirpath="$fullpath";
+    function main_run {
+        if not_empty_path "$full_path" && [[ ! -z "$full_path" ]]; then
+            if does_end_with_slash $full_path; then
+                declare -r filenames=$empty_path;
+                declare -r dirpath="$full_path";
+            else
+                declare -r filenames=`basename $full_path`;
+                declare -r dirpath=`dirname $full_path`;
+            fi
+
+            if not_empty_path $dirpath; then
+                echo_and_run "mkdir -p $dirpath && cd $dirpath";
+            fi
+
+            if not_empty_path $filenames; then
+                split_by_delimiter $filenames;
+                for filename in "${SPLIT_BY_DELIMITER_ARRAY[@]}"
+                do
+                    declare -r touchFilename="touch $filename";
+                    declare -r openFilename="$MAKEWALK_OPENER $filename";
+
+                    if is_yes $MAKEWALK_DISABLE_OPEN; then
+                        echo_and_run "$touchFilename";
+                    else
+                        echo_and_run "$touchFilename && $openFilename";
+                    fi
+                done
+            fi
+
+            if is_yes $MAKEWALK_DISABLE_CD; then
+                echo_and_run "cd $startpath"
+            fi
         else
-            declare -r filenames=`basename $fullpath`;
-            declare -r dirpath=`dirname $fullpath`;
+            echo `colorise $error_color "No path provided."`;
+            return 1;
         fi
+    }
 
-        if not_empty_path $dirpath; then
-            echo_and_run "mkdir -p $dirpath && cd $dirpath";
-        fi
-
-        if not_empty_path $filenames; then
-            split_by_delimiter $filenames;
-            for filename in "${SPLIT_BY_DELIMITER_ARRAY[@]}"
-            do
-                declare -r touchFilename="touch $filename";
-                declare -r openFilename="$MAKEWALK_OPENER $filename";
-
-                if is_yes $MAKEWALK_DISABLE_OPEN; then
-                    echo_and_run "$touchFilename";
-                else
-                    echo_and_run "$touchFilename && $openFilename";
-                fi
-            done
-        fi
-
-        if is_yes $MAKEWALK_DISABLE_CD; then
-            echo_and_run "cd $startpath"
-        fi
+    if is_yes $MAKEWALK_DISABLE_JOINING; then
+        for full_path in "$@"
+        do
+            main_run $full_path;
+        done
     else
-        echo `colorise $error_color "No path provided."`;
-        return 1;
+        declare -r full_path=`join_by_separator "$@"`;
+        main_run $full_path;
     fi
 }
