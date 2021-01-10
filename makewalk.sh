@@ -43,8 +43,9 @@ declare -rf makewalk() {
     }
 
     declare -rf split_by_delimiter() {
-        declare -r delimiter=$1; shift;
-        echo $* | tr $delimiter "\n";
+        declare IFS=$1; shift;
+        read -a array <<< $*;
+        return $array;
     }
 
     declare -rf colorise() {
