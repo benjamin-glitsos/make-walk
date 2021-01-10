@@ -20,7 +20,7 @@ declare -rf makewalk() {
 
     declare -rf echo_and_run() {
         declare -r color=$1; shift;
-        echo "$color \$ $* $nocolor"; eval $*;
+        echo "\$$color $* $nocolor"; eval $*;
     }
 
     # Main --------------------
