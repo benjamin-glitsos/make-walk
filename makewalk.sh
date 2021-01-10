@@ -12,8 +12,8 @@ function makewalk() {
     }
     readonly -f join_by_separator &>/dev/null
 
-    function run_and_echo() {
-        echo "$*" ; "$@" ;
+    function echo_and_run() {
+        echo "\$ $*"; eval "$*"
     }
     readonly -f run_and_echo &>/dev/null
 
@@ -23,7 +23,7 @@ function makewalk() {
     readonly filename=`basename $fullpath`
     readonly dirpath=`dirname $fullpath`
 
-    run_and_echo `mkdir -p $dirpath`
-    run_and_echo `cd $dirpath`
+    echo_and_run "mkdir -p $dirpath"
+    echo_and_run "cd $dirpath"
 }
 readonly -f makewalk &>/dev/null
