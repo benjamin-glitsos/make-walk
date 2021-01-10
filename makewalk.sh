@@ -4,4 +4,9 @@ function join_by_separator() {
     local IFS="-"; echo "$*";
 }
 
-join_by_separator "$@"
+fullpath=`join_by_separator "$@"`
+filename=`basename $fullpath`
+dirpath=`dirname $fullpath`
+
+echo $filename
+echo $dirpath
