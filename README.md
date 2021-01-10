@@ -21,7 +21,8 @@ m new folder/second folder/new file.txt,.dotfile example,third file.txt
 # $ touch .dotfile-example && xdg-open .dotfile-example
 # $ touch third-file.txt && xdg-open third-file.txt
 ```
-## Settings
+
+## Configuration
 
 Most parts of this application are configurable, and there are even some additional features that you can enable. Configuration is done through the use of environment variables which you can set in your `.profile`.
 
