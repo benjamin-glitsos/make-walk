@@ -10,7 +10,7 @@ Firstly, it's convenient to set this alias in your `.bashrc`:
 alias m="makewalk"
 ```
 
-Then use it like:
+Then use it like this:
 
 ```
 m new folder/second folder/new file.txt,.dotfile example,third file.txt
@@ -24,7 +24,7 @@ m new folder/second folder/new file.txt,.dotfile example,third file.txt
 
 Most parts of this application are configurable, and there are even some additional features that you can enable. Configuration is done through the use of environment variables which you can set in your `.profile`.
 
-Here are all of the environment variables that you can configure, except these are set to their default values for your reference:
+Here are all of the environment variables that you can configure, except these examples are set to their default values for your reference:
 
 ```
 export MAKEWALK_DIRECTORY_JOINER="-"
