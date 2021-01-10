@@ -1,6 +1,6 @@
 # MakeWalk
 
-A single command that combines `mkdir -p`, `touch`, `cd`, `xdg-open`, `ls` and joins filenames with a separator. Highly configurable.
+A single command that combines `mkdir -p`, `touch`, `cd`, `xdg-open`, `ls` and joins filenames with a separator. It's designed to be very fast and also highly configurable.
 
 ## Usage
 
