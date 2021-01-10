@@ -8,6 +8,8 @@ function makewalk {
     MAKEWALK_OPENER="${MAKEWALK_OPENER:=xdg-open}";
     MAKEWALK_DISABLE_CD="${MAKEWALK_DISABLE_CD:=no}";
     MAKEWALK_DISABLE_OPEN="${MAKEWALK_DISABLE_OPEN:=no}";
+    MAKEWALK_DISABLE_PRINT="${MAKEWALK_DISABLE_PRINT:=no}";
+    MAKEWALK_DISABLE_COLORS="${MAKEWALK_DISABLE_COLORS:=no}";
 
     # Constants --------------------
 
@@ -43,6 +45,13 @@ function makewalk {
         false;
     }
 
+    function not_yes {
+        if [[ $* != "yes" ]]; then
+            return;
+        fi
+        false;
+    }
+
     function join_by_separator {
         declare IFS=$MAKEWALK_SEPARATOR;
         echo "$*";
@@ -55,13 +64,19 @@ function makewalk {
 
     function colorise {
         declare -r color=$1; shift;
-        echo "$color$*$nocolor"
+        if is_yes $MAKEWALK_DISABLE_COLORS; then
+            echo "$*";
+        else
+            echo "$color$*$nocolor";
+        fi
     }
 
     function echo_and_run {
         declare -r shell_symbol=`colorise $cyan \$`;
         declare -r shell_command=`colorise $purple $*`;
-        echo "$shell_symbol $shell_command";
+        if not_yes $MAKEWALK_DISABLE_PRINT; then
+            echo "$shell_symbol $shell_command";
+        fi
         eval $*;
     }
 
@@ -91,9 +106,9 @@ function makewalk {
                 declare -r openFilename="$MAKEWALK_OPENER $filename";
 
                 if is_yes $MAKEWALK_DISABLE_OPEN; then
-                    echo_and_run "$touchFilename"
+                    echo_and_run "$touchFilename";
                 else
-                    echo_and_run "$touchFilename && $openFilename"
+                    echo_and_run "$touchFilename && $openFilename";
                 fi
             done
         fi
