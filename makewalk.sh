@@ -4,7 +4,7 @@
 # TODO: not_empty_path not working
 # TODO: join_by_separator no longer working?
 
-declare -rf makewalk {
+function makewalk {
     # Environment Variables --------------------
 
     MAKEWALK_SEPARATOR="${MAKEWALK_SEPARATOR:=-}"
@@ -24,37 +24,36 @@ declare -rf makewalk {
 
     # Utilities --------------------
 
-    declare -rf not_empty_path {
+    function not_empty_path {
         if [[ $* != $empty_path ]]; then
-            echo "ne"
             return;
         fi
         false
     }
 
-    declare -rf does_end_with_slash {
+    function does_end_with_slash {
         if [[ $* =~ "/$" ]]; then
             return;
         fi
         false;
     }
 
-    declare -rf join_by_separator {
-        declare IFS=$MAKEWALK_SEPARATOR; echo $*;
+    function join_by_separator {
+        declare IFS=$MAKEWALK_SEPARATOR; echo "$*";
     }
 
-    declare -rf split_by_delimiter {
+    function split_by_delimiter {
         declare IFS=$1; shift;
         read -a array <<< $*;
         return $array;
     }
 
-    declare -rf colorise {
+    function colorise {
         declare -r color=$1; shift;
         echo "$color$*$nocolor"
     }
 
-    declare -rf echo_and_run {
+    function echo_and_run {
         declare -r shell_symbol=`colorise $cyan \$`;
         declare -r shell_command=`colorise $purple $*`;
         echo "$shell_symbol $shell_command";
@@ -65,25 +64,27 @@ declare -rf makewalk {
 
     declare -r fullpath=`join_by_separator "$@"`;
 
-    if not_empty_path $fullpaths && [ ! -z $fullpath ]; then
+    if not_empty_path "$fullpath" && [ ! -z "$fullpath" ]; then
         if does_end_with_slash $fullpath; then
             declare -r filenames=$empty_path;
-            declare -r dirpath=$fullpath;
+            declare -r dirpath="$fullpath";
         else
             declare -r filenames=`basename $fullpath`;
             declare -r dirpath=`dirname $fullpath`;
         fi
 
+        echo $dirpath;
+
         if not_empty_path $dirpath; then
             echo_and_run "mkdir -p $dirpath && cd $dirpath";
         fi
 
-        if not_empty_path $filenames; then
-            for filename in `split_by_delimiter $MAKEWALK_DELIMITER $filenames`
-            do
-                echo_and_run "touch $filename && $MAKEWALK_OPENER $filename";
-            done
-        fi
+        # if not_empty_path $filenames; then
+        #     for filename in `split_by_delimiter $MAKEWALK_DELIMITER $filenames`
+        #     do
+        #         echo_and_run "touch $filename && $MAKEWALK_OPENER $filename";
+        #     done
+        # fi
     else
         echo `colorise $red "No path provided."`;
         return 1;
