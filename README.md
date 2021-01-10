@@ -15,14 +15,16 @@ Supported shells:
 
 ## Installation
 
-This program is a single bash script which you can download, put into your PATH and then alias in your `.bashrc`:
+This program is a single bash script which you can download, put into your PATH and then alias in your `.bashrc`.
 
-```console
-$ git clone git@github.com:benjamin-glitsos/makewalk.git
-$ cd makewalk/
-$ mv makewalk.sh ~/bin/makewalk.sh
-$ cd ..
-$ rm -r makewalk/
+First run commands such as these to add it to your PATH:
+
+```bash
+git clone git@github.com:benjamin-glitsos/makewalk.git
+cd makewalk/
+mv makewalk.sh ~/bin/makewalk.sh
+cd ..
+rm -r makewalk/
 ```
 
 Then in your `.bashrc`:
@@ -34,8 +36,8 @@ alias m="makewalk";
 
 ## Usage
 
-```console
-$ m new folder/second folder/new file.txt,.dotfile example,third file.txt
+```bash
+m new folder/second folder/new file.txt,.dotfile example,third file.txt
 
 # Output:
 # $ mkdir -p new-folder/second-folder && cd new-folder/second-folder
