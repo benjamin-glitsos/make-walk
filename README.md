@@ -15,9 +15,9 @@ Supported shells:
 
 ## Installation
 
-This program is a single bash script which you can download, put into your PATH and then alias in your `.bashrc`.
+This program is a single bash script and hence it is quite simple to install.
 
-First run commands such as these to add it to your PATH:
+First run commands such as these to download the script and add it to your PATH:
 
 ```bash
 git clone git@github.com:benjamin-glitsos/makewalk.git
@@ -27,7 +27,7 @@ cd ..
 rm -r makewalk/
 ```
 
-Then in your `.bashrc`:
+Then in your `.bashrc` you will source and alias the script:
 
 ```bash
 source makewalk.sh;
