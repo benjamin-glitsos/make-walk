@@ -1,8 +1,6 @@
 #!/usr/bin/env bash
 
-# TODO: make this work using bash rather than zsh
 # TODO: not_empty_path not working
-# TODO: join_by_separator no longer working?
 
 function makewalk {
     # Environment Variables --------------------
@@ -43,9 +41,7 @@ function makewalk {
     }
 
     function split_by_delimiter {
-        declare IFS=$1; shift;
-        read -a array <<< $*;
-        return $array;
+        IFS="$MAKEWALK_DELIMITER" read -r -a SPLIT_BY_DELIMITER_ARRAY <<< $*;
     }
 
     function colorise {
@@ -73,18 +69,17 @@ function makewalk {
             declare -r dirpath=`dirname $fullpath`;
         fi
 
-        echo $dirpath;
-
         if not_empty_path $dirpath; then
             echo_and_run "mkdir -p $dirpath && cd $dirpath";
         fi
 
-        # if not_empty_path $filenames; then
-        #     for filename in `split_by_delimiter $MAKEWALK_DELIMITER $filenames`
-        #     do
-        #         echo_and_run "touch $filename && $MAKEWALK_OPENER $filename";
-        #     done
-        # fi
+        if not_empty_path $filenames; then
+            split_by_delimiter $filenames;
+            for filename in "${SPLIT_BY_DELIMITER_ARRAY[@]}"
+            do
+                echo_and_run "touch $filename && $MAKEWALK_OPENER $filename";
+            done
+        fi
     else
         echo `colorise $red "No path provided."`;
         return 1;
