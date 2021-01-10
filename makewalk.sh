@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
 
 declare -rf makewalk() {
-    # Settings --------------------
+    # Environment Variables --------------------
 
-    # TODO: make these environment variables
-    declare -r separator="-";
-    declare -r file_delimiter=",";
-    declare -r opener="xdg-open";
+    MAKEWALK_SEPARATOR="${MAKEWALK_SEPARATOR:=-}"
+    MAKEWALK_DELIMITER="${MAKEWALK_DELIMITER:=,}";
+    MAKEWALK_OPENER="${MAKEWALK_OPENER:=xdg-open}";
 
     # Constants --------------------
 
@@ -14,6 +13,7 @@ declare -rf makewalk() {
 
     # Colors --------------------
 
+    declare -r red="\033[0;31m";
     declare -r purple="\033[0;35m";
     declare -r cyan="\033[0;36m";
     declare -r nocolor="\033[0m";
@@ -21,7 +21,9 @@ declare -rf makewalk() {
     # Utilities --------------------
 
     declare -rf not_empty_path() {
+    # TODO: not working
         if [[ $* != $empty_path ]]; then
+            echo "ne"
             return;
         fi
         false
@@ -35,7 +37,7 @@ declare -rf makewalk() {
     }
 
     declare -rf join_by_separator() {
-        declare IFS=$separator; echo $*;
+        declare IFS=$MAKEWALK_SEPARATOR; echo $*;
     }
 
     declare -rf split_by_delimiter() {
@@ -58,7 +60,7 @@ declare -rf makewalk() {
 
     declare -r fullpath=`join_by_separator "$@"`;
 
-    if not_empty_path $fullpaths && [ -z "$fullpaths" ]; then
+    if not_empty_path $fullpaths && [ ! -z $fullpath ]; then
         if does_end_with_slash $fullpath; then
             declare -r filenames=$empty_path;
             declare -r dirpath=$fullpath;
@@ -72,13 +74,13 @@ declare -rf makewalk() {
         fi
 
         if not_empty_path $filenames; then
-            for filename in `split_by_delimiter $file_delimiter $filenames`
+            for filename in `split_by_delimiter $MAKEWALK_DELIMITER $filenames`
             do
-                echo_and_run "touch $filename && $opener $filename";
+                echo_and_run "touch $filename && $MAKEWALK_OPENER $filename";
             done
         fi
     else
-        echo `colorise $red "No path provided."`
-        exit 1
+        echo `colorise $red "No path provided."`;
+        return 1;
     fi
 }
