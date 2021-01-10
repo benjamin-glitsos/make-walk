@@ -69,7 +69,9 @@ export MAKEWALK_DIRECTORY_PRINT_COMMAND="ls";
 export MAKEWALK_FILE_MAKE_COMMAND="touch";
 export MAKEWALK_FILE_OPEN_COMMAND="xdg-open";
 
-export MAKEWALK_DISABLE_PATH_JOINING="no"; # Note: when this is 'yes', it allows you to create multiple directory paths in one command e.g. m a/b/c.txt d/e/f.txt
+export MAKEWALK_DISABLE_PATH_JOINING="no"; # Note: when this is 'yes', it allows
+# you to create multiple directory paths in one command.
+# e.g. m a/b/c.txt d/e/f.txt
 export MAKEWALK_DISABLE_FILE_DELIMITING="no";
 export MAKEWALK_DISABLE_CONSOLE_PRINT="yes";
 export MAKEWALK_DISABLE_CONSOLE_COLORS="yes";
