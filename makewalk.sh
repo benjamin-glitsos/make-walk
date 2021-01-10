@@ -10,17 +10,13 @@ function makewalk {
     MAKEWALK_DISABLE_OPEN="${MAKEWALK_DISABLE_OPEN:=no}";
     MAKEWALK_DISABLE_PRINT="${MAKEWALK_DISABLE_PRINT:=no}";
     MAKEWALK_DISABLE_COLORS="${MAKEWALK_DISABLE_COLORS:=no}";
+    MAKEWALK_COLOR_BODY="${MAKEWALK_COLOR_BODY:=0;35}";
+    MAKEWALK_COLOR_HIGHLIGHT="${MAKEWALK_COLOR_HIGHLIGHT:=0;36}";
+    MAKEWALK_COLOR_ERROR="${MAKEWALK_COLOR_ERROR:=0;31}";
 
     # Constants --------------------
 
     declare -r empty_path=".";
-
-    # Colors --------------------
-
-    declare -r red="\033[0;31m";
-    declare -r purple="\033[0;35m";
-    declare -r cyan="\033[0;36m";
-    declare -r nocolor="\033[0m";
 
     # Utilities --------------------
 
@@ -62,6 +58,10 @@ function makewalk {
         read -ra SPLIT_BY_DELIMITER_ARRAY <<< $*;
     }
 
+    function create_color {
+        echo "\033[$*m"
+    }
+
     function colorise {
         declare -r color=$1; shift;
         if is_yes $MAKEWALK_DISABLE_COLORS; then
@@ -72,13 +72,20 @@ function makewalk {
     }
 
     function echo_and_run {
-        declare -r shell_symbol=`colorise $cyan \$`;
-        declare -r shell_command=`colorise $purple $*`;
+        declare -r shell_symbol=`colorise $highlight_color \$`;
+        declare -r shell_command=`colorise $body_color $*`;
         if not_yes $MAKEWALK_DISABLE_PRINT; then
             echo "$shell_symbol $shell_command";
         fi
         eval $*;
     }
+
+    # Colors --------------------
+
+    declare -r body_color=`create_color $MAKEWALK_COLOR_BODY`;
+    declare -r highlight_color=`create_color $MAKEWALK_COLOR_HIGHLIGHT`;
+    declare -r error_color=`create_color $MAKEWALK_COLOR_ERROR`;
+    declare -r nocolor=`create_color 0`;
 
     # Main --------------------
 
@@ -117,7 +124,7 @@ function makewalk {
             echo_and_run "cd $startpath"
         fi
     else
-        echo `colorise $red "No path provided."`;
+        echo `colorise $error_color "No path provided."`;
         return 1;
     fi
 }
