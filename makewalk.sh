@@ -4,6 +4,7 @@ function makewalk() {
     # Settings --------------------
 
     readonly separator="-"
+    readonly opener="vimer"
 
     # Utilities --------------------
 
@@ -25,5 +26,7 @@ function makewalk() {
 
     echo_and_run "mkdir -p $dirpath"
     echo_and_run "cd $dirpath"
+    echo_and_run "touch $filename"
+    echo_and_run "$opener $filename"
 }
 readonly -f makewalk &>/dev/null
