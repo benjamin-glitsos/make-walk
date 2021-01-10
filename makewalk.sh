@@ -3,19 +3,25 @@
 function makewalk {
     # Environment Variables --------------------
 
-    MAKEWALK_PATH_JOINER="${MAKEWALK_PATH_JOINER:=-}"
+    MAKEWALK_DIRECTORY_JOINER="${MAKEWALK_DIRECTORY_JOINER:=-}"
     MAKEWALK_FILE_DELIMITER="${MAKEWALK_FILE_DELIMITER:=,}";
+
+    MAKEWALK_DIRECTORY_MAKE_COMMAND="${MAKEWALK_DIRECTORY_MAKE_COMMAND:=mkdir -p}";
+    MAKEWALK_DIRECTORY_ENTER_COMMAND="${MAKEWALK_DIRECTORY_ENTER_COMMAND:=cd}";
+    MAKEWALK_DIRECTORY_PRINT_COMMAND="${MAKEWALK_DIRECTORY_PRINT_COMMAND:=ls}";
     MAKEWALK_FILE_MAKE_COMMAND="${MAKEWALK_FILE_MAKE_COMMAND:=touch}";
     MAKEWALK_FILE_OPEN_COMMAND="${MAKEWALK_FILE_OPEN_COMMAND:=xdg-open}";
-    MAKEWALK_PATH_MAKE_COMMAND="${MAKEWALK_PATH_MAKE_COMMAND:=mkdir -p}";
-    MAKEWALK_PATH_ENTER_COMMAND="${MAKEWALK_PATH_ENTER_COMMAND:=cd}";
-    MAKEWALK_DISABLE_PATH_JOINING="${MAKEWALK_DISABLE_PATH_JOINING:=no}";
+
+    MAKEWALK_DISABLE_DIRECTORY_JOINING="${MAKEWALK_DISABLE_DIRECTORY_JOINING:=no}";
     MAKEWALK_DISABLE_FILE_DELIMITING="${MAKEWALK_DISABLE_FILE_DELIMITING:=no}";
-    MAKEWALK_DISABLE_PATH_MAKE="${MAKEWALK_DISABLE_PATH_MAKE:=no}";
-    MAKEWALK_DISABLE_PATH_ENTER="${MAKEWALK_DISABLE_PATH_ENTER:=no}";
-    MAKEWALK_DISABLE_FILE_OPEN="${MAKEWALK_DISABLE_FILE_OPEN:=no}";
+
     MAKEWALK_DISABLE_CONSOLE_PRINT="${MAKEWALK_DISABLE_CONSOLE_PRINT:=no}";
     MAKEWALK_DISABLE_CONSOLE_COLORS="${MAKEWALK_DISABLE_CONSOLE_COLORS:=no}";
+    MAKEWALK_DISABLE_DIRECTORY_MAKE="${MAKEWALK_DISABLE_DIRECTORY_MAKE:=no}";
+    MAKEWALK_DISABLE_DIRECTORY_ENTER="${MAKEWALK_DISABLE_DIRECTORY_ENTER:=no}";
+    MAKEWALK_ENABLE_DIRECTORY_PRINT="${MAKEWALK_ENABLE_DIRECTORY_PRINT:=no}";
+    MAKEWALK_DISABLE_FILE_OPEN="${MAKEWALK_DISABLE_FILE_OPEN:=no}";
+
     MAKEWALK_COLOR_BODY="${MAKEWALK_COLOR_BODY:=0;35}";
     MAKEWALK_COLOR_HIGHLIGHT="${MAKEWALK_COLOR_HIGHLIGHT:=0;36}";
     MAKEWALK_COLOR_ERROR="${MAKEWALK_COLOR_ERROR:=0;31}";
@@ -55,7 +61,7 @@ function makewalk {
     }
 
     function join_by_separator {
-        declare IFS=$MAKEWALK_PATH_JOINER;
+        declare IFS=$MAKEWALK_DIRECTORY_JOINER;
         echo "$*";
     }
 
@@ -108,10 +114,10 @@ function makewalk {
             fi
 
             if not_empty_path $dirpath; then
-                declare -r make_path="$MAKEWALK_PATH_MAKE_COMMAND $dirpath"
-                declare -r enter_path="$MAKEWALK_PATH_ENTER_COMMAND $dirpath"
+                declare -r make_path="$MAKEWALK_DIRECTORY_MAKE_COMMAND $dirpath"
+                declare -r enter_path="$MAKEWALK_DIRECTORY_ENTER_COMMAND $dirpath"
 
-                if is_yes $MAKEWALK_DISABLE_PATH_MAKE; then
+                if is_yes $MAKEWALK_DISABLE_DIRECTORY_MAKE; then
                     echo_and_run "$enter_path";
                 else
                     echo_and_run "$make_path && $enter_path";
@@ -143,8 +149,10 @@ function makewalk {
                 fi
             fi
 
-            if is_yes $MAKEWALK_DISABLE_PATH_ENTER; then
-                echo_and_run "cd $startpath"
+            if is_yes $MAKEWALK_DISABLE_DIRECTORY_ENTER; then
+                echo_and_run "$MAKEWALK_DIRECTORY_ENTER_COMMAND $startpath";
+            elif is_yes $MAKEWALK_ENABLE_DIRECTORY_PRINT; then
+                echo_and_run "$MAKEWALK_DIRECTORY_PRINT_COMMAND";
             fi
         else
             echo `colorise $error_color "No path provided."`;
@@ -152,7 +160,7 @@ function makewalk {
         fi
     }
 
-    if is_yes $MAKEWALK_DISABLE_PATH_JOINING; then
+    if is_yes $MAKEWALK_DISABLE_DIRECTORY_JOINING; then
         for full_path in "$@"
         do
             main_run $full_path;
