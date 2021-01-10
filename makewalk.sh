@@ -6,6 +6,7 @@ function makewalk {
     MAKEWALK_SEPARATOR="${MAKEWALK_SEPARATOR:=-}"
     MAKEWALK_DELIMITER="${MAKEWALK_DELIMITER:=,}";
     MAKEWALK_OPENER="${MAKEWALK_OPENER:=xdg-open}";
+    MAKEWALK_CD="${MAKEWALK_CD:=yes}";
 
     # Constants --------------------
 
@@ -29,6 +30,13 @@ function makewalk {
 
     function does_end_with_slash {
         if [[ $* =~ "/$" ]]; then
+            return;
+        fi
+        false;
+    }
+
+    function not_yes {
+        if [[ $* != "yes" ]]; then
             return;
         fi
         false;
@@ -59,8 +67,9 @@ function makewalk {
     # Main --------------------
 
     declare -r fullpath=`join_by_separator "$@"`;
+    declare -r startpath=`pwd`
 
-    if not_empty_path "$fullpath" && [ ! -z "$fullpath" ]; then
+    if not_empty_path "$fullpath" && [[ ! -z "$fullpath" ]]; then
         if does_end_with_slash $fullpath; then
             declare -r filenames=$empty_path;
             declare -r dirpath="$fullpath";
@@ -79,6 +88,10 @@ function makewalk {
             do
                 echo_and_run "touch $filename && $MAKEWALK_OPENER $filename";
             done
+        fi
+
+        if not_yes $MAKEWALK_CD; then
+            echo_and_run "cd $startpath"
         fi
     else
         echo `colorise $red "No path provided."`;
