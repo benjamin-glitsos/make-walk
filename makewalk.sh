@@ -13,9 +13,9 @@ function makewalk() {
     readonly -f join_by_separator &>/dev/null
 
     function echo_and_run() {
-        echo "\$ $*"; eval "$*"
+        echo "\$ $*"; eval $*;
     }
-    readonly -f run_and_echo &>/dev/null
+    readonly -f echo_and_run &>/dev/null
 
     # Main --------------------
 
