@@ -91,4 +91,5 @@ I personally use the following configuration:
 ```bash
 export MAKEWALK_FILE_OPEN_COMMAND="vimer";
 export MAKEWALK_ENABLE_PWD_PRINT="yes";
+export MAKEWALK_ENABLE_PATHS_PRINT="yes";
 ```

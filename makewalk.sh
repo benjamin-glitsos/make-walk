@@ -21,6 +21,7 @@ function makewalk {
     MAKEWALK_ENABLE_DIRECTORY_PRINT="${MAKEWALK_ENABLE_DIRECTORY_PRINT:=no}";
     MAKEWALK_DISABLE_FILE_OPEN="${MAKEWALK_DISABLE_FILE_OPEN:=no}";
     MAKEWALK_ENABLE_PWD_PRINT="${MAKEWALK_ENABLE_PWD_PRINT:=no}";
+    MAKEWALK_ENABLE_PATHS_PRINT="${MAKEWALK_ENABLE_PATHS_PRINT:=no}";
 
     MAKEWALK_COLOR_BODY="${MAKEWALK_COLOR_BODY:=0;35}";
     MAKEWALK_COLOR_HIGHLIGHT="${MAKEWALK_COLOR_HIGHLIGHT:=0;36}";
@@ -106,6 +107,7 @@ function makewalk {
     # Main --------------------
 
     declare -r startpath=`pwd`
+    declare endpaths=""
 
     function main_run {
         if not_empty_path "$full_path" && [[ ! -z "$full_path" ]]; then
@@ -126,6 +128,8 @@ function makewalk {
                 else
                     echo_and_run "$make_path && $enter_path";
                 fi
+
+                endpaths="$endpaths\nFolder: $dirpath"
             fi
 
             if not_empty_path $filenames; then
@@ -144,11 +148,13 @@ function makewalk {
                 if is_yes $MAKEWALK_DISABLE_FILE_DELIMITING; then
                     declare -r filename=$filenames;
                     filename_run $filename;
+                    endpaths="$endpaths\nFile: $filename"
                 else
                     split_by_delimiter $filenames;
                     for filename in "${SPLIT_BY_FILE_DELIMITER_ARRAY[@]}"
                     do
                         filename_run $filename;
+                        endpaths="$endpaths\nFile: $filename"
                     done
                 fi
             fi
@@ -177,4 +183,10 @@ function makewalk {
     if is_yes $MAKEWALK_ENABLE_PWD_PRINT; then
         echo_and_run "pwd"
     fi
+
+    echo $endpaths;
+
+    # if is_yes $MAKEWALK_ENABLE_PATHS_PRINT; then
+    #     echo_and_run "echo $endpaths"
+    # fi
 }
