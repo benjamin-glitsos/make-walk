@@ -79,6 +79,7 @@ export MAKEWALK_DISABLE_DIRECTORY_MAKE="no";
 export MAKEWALK_DISABLE_DIRECTORY_ENTER="no";
 export MAKEWALK_ENABLE_DIRECTORY_PRINT="no";
 export MAKEWALK_DISABLE_FILE_OPEN="no";
+export MAKEWALK_ENABLE_PWD_PRINT="no";
 
 export MAKEWALK_COLOR_BODY="0;35";
 export MAKEWALK_COLOR_HIGHLIGHT="0;36";
@@ -89,4 +90,5 @@ I personally use the following configuration:
 
 ```bash
 export MAKEWALK_FILE_OPEN_COMMAND="vimer";
+export MAKEWALK_ENABLE_PWD_PRINT="yes";
 ```
