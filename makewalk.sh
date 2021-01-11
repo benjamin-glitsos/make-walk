@@ -153,7 +153,7 @@ function makewalk {
                 fi
             fi
 
-            if is_yes $MAKEWALK_DISABLE_DIRECTORY_ENTER; then
+            if is_yes $MAKEWALK_DISABLE_DIRECTORY_ENTER || is_yes $MAKEWALK_DISABLE_PATH_JOINING; then
                 echo_and_run "$MAKEWALK_DIRECTORY_ENTER_COMMAND $startpath";
             elif is_yes $MAKEWALK_ENABLE_DIRECTORY_PRINT; then
                 echo_and_run "$MAKEWALK_DIRECTORY_PRINT_COMMAND";
