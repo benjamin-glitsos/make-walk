@@ -129,7 +129,7 @@ function makewalk {
                     echo_and_run "$make_path && $enter_path";
                 fi
 
-                endpaths="$endpaths\nFolder: $dirpath"
+                endpaths="$endpaths\nFolder: ${realpath $dirpath}"
             fi
 
             if not_empty_path $filenames; then
@@ -148,13 +148,13 @@ function makewalk {
                 if is_yes $MAKEWALK_DISABLE_FILE_DELIMITING; then
                     declare -r filename=$filenames;
                     filename_run $filename;
-                    endpaths="$endpaths\nFile: $filename"
+                    endpaths="$endpaths\nFile: ${realpath $filename}"
                 else
                     split_by_delimiter $filenames;
                     for filename in "${SPLIT_BY_FILE_DELIMITER_ARRAY[@]}"
                     do
                         filename_run $filename;
-                        endpaths="$endpaths\nFile: $filename"
+                        endpaths="$endpaths\nFile: ${realpath $filename}"
                     done
                 fi
             fi
