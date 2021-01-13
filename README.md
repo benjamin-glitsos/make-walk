@@ -36,6 +36,20 @@ alias m="makewalk";
 
 ## Usage
 
+You can simply make a file:
+
+```
+m new file.txt
+```
+
+Or make a folder:
+
+```
+m new folder/
+```
+
+Or make a path of folders containing multiple files like so:
+
 ```bash
 m new folder/second folder/new file.txt,.dotfile example,another file.txt
 
