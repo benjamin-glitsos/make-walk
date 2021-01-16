@@ -26,6 +26,7 @@ function makewalk {
     MAKEWALK_COLOR_BODY="${MAKEWALK_COLOR_BODY:=0;35}";
     MAKEWALK_COLOR_HIGHLIGHT="${MAKEWALK_COLOR_HIGHLIGHT:=0;36}";
     MAKEWALK_COLOR_ERROR="${MAKEWALK_COLOR_ERROR:=0;31}";
+    MAKEWALK_COLOR_PWD_PRINT="${MAKEWALK_COLOR_ERROR:=0;34}";
 
     # Constants --------------------
 
@@ -97,18 +98,24 @@ function makewalk {
         eval $*;
     }
 
+    declare endpaths=""
+    function add_endpath {
+        declare -r endpath=$1;
+        declare -r absolute_path=$(realpath $endpath);
+        endpaths="$endpaths\nCreated: $absolute_path"
+}
+
     # Colors --------------------
 
     declare -r body_color=`create_color $MAKEWALK_COLOR_BODY`;
     declare -r highlight_color=`create_color $MAKEWALK_COLOR_HIGHLIGHT`;
     declare -r error_color=`create_color $MAKEWALK_COLOR_ERROR`;
+    declare -r pwd_color=`create_color $MAKEWALK_COLOR_PWD_PRINT`
     declare -r nocolor=`create_color 0`;
 
     # Main --------------------
 
     declare -r startpath=`pwd`
-    declare endpaths=""
-    declare endpath=""
 
     function main_run {
         if not_empty_path "$full_path" && [[ ! -z "$full_path" ]]; then
@@ -130,8 +137,7 @@ function makewalk {
                     echo_and_run "$make_path && $enter_path";
                 fi
 
-                endpath=`realpath ../$dirpath`
-                endpaths="$endpaths\nFolder: $endpath"
+                add_endpath "../$dirpath";
             fi
 
             if not_empty_path $filenames; then
@@ -150,15 +156,13 @@ function makewalk {
                 if is_yes $MAKEWALK_DISABLE_FILE_DELIMITING; then
                     declare -r filename=$filenames;
                     filename_run $filename;
-                    endpath=`realpath $filename`
-                    endpaths="$endpaths\nFile: $endpath"
+                    add_endpath $filename;
                 else
                     split_by_delimiter $filenames;
                     for filename in "${SPLIT_BY_FILE_DELIMITER_ARRAY[@]}"
                     do
                         filename_run $filename;
-                        endpath=`realpath $filename`
-                        endpaths="$endpaths\nFile: $endpath"
+                        add_endpath $filename;
                     done
                 fi
             fi
@@ -185,12 +189,10 @@ function makewalk {
     fi
 
     if is_yes $MAKEWALK_ENABLE_PWD_PRINT; then
-        echo_and_run "pwd"
+        echo `colorise $highlight_color $(pwd)`;
     fi
 
-    echo $endpaths;
-
-    # if is_yes $MAKEWALK_ENABLE_PATHS_PRINT; then
-    #     echo_and_run "echo $endpaths"
-    # fi
+    if is_yes $MAKEWALK_ENABLE_PATHS_PRINT; then
+        echo $endpaths;
+    fi
 }

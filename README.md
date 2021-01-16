@@ -84,6 +84,7 @@ export MAKEWALK_ENABLE_PWD_PRINT="no";
 export MAKEWALK_COLOR_BODY="0;35";
 export MAKEWALK_COLOR_HIGHLIGHT="0;36";
 export MAKEWALK_COLOR_ERROR="0;31";
+export MAKEWALK_COLOR_PWD_PRINT="0;34";
 ```
 
 I personally use the following configuration:
