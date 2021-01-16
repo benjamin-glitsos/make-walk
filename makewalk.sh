@@ -108,6 +108,7 @@ function makewalk {
 
     declare -r startpath=`pwd`
     declare endpaths=""
+    declare endpath=""
 
     function main_run {
         if not_empty_path "$full_path" && [[ ! -z "$full_path" ]]; then
@@ -129,7 +130,8 @@ function makewalk {
                     echo_and_run "$make_path && $enter_path";
                 fi
 
-                endpaths="$endpaths\nFolder: ${realpath $dirpath}"
+                endpath=`realpath ../$dirpath`
+                endpaths="$endpaths\nFolder: $endpath"
             fi
 
             if not_empty_path $filenames; then
@@ -148,13 +150,15 @@ function makewalk {
                 if is_yes $MAKEWALK_DISABLE_FILE_DELIMITING; then
                     declare -r filename=$filenames;
                     filename_run $filename;
-                    endpaths="$endpaths\nFile: ${realpath $filename}"
+                    endpath=`realpath $filename`
+                    endpaths="$endpaths\nFile: $endpath"
                 else
                     split_by_delimiter $filenames;
                     for filename in "${SPLIT_BY_FILE_DELIMITER_ARRAY[@]}"
                     do
                         filename_run $filename;
-                        endpaths="$endpaths\nFile: ${realpath $filename}"
+                        endpath=`realpath $filename`
+                        endpaths="$endpaths\nFile: $endpath"
                     done
                 fi
             fi
