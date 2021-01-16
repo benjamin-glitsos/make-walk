@@ -56,19 +56,25 @@ Or make a path of folders containing multiple files like so:
 
 ```bash
 m new folder/second folder/new file.txt,.dotfile example,another file.txt
+```
 
-# Output:
-# $ mkdir -p new-folder/second-folder && cd new-folder/second-folder
-# $ touch new-file.txt && xdg-open new-file.txt
-# $ touch .dotfile-example && xdg-open .dotfile-example
-# $ touch another-file.txt && xdg-open another-file.txt
+The console output will be:
 
-# These files and folders were created:
-# new-folder
-# └── second-folder
-#    ├── .dotfile-example
-#    ├── another-file.txt
-#    └── new-file.txt
+```
+$ mkdir -p new-folder/second-folder && cd new-folder/second-folder
+$ touch new-file.txt && xdg-open new-file.txt
+$ touch .dotfile-example && xdg-open .dotfile-example
+$ touch another-file.txt && xdg-open another-file.txt
+```
+
+The following files and folders will be created:
+
+```
+new-folder
+└── second-folder
+   ├── .dotfile-example
+   ├── another-file.txt
+   └── new-file.txt
 ```
 
 ## Configuration
