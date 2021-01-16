@@ -102,7 +102,7 @@ function makewalk {
     function add_endpath {
         declare -r endpath=$1;
         declare -r absolute_path=$(realpath $endpath);
-        endpaths="$endpaths\nCreated: $absolute_path"
+        endpaths="$endpaths\nMade: $absolute_path"
 }
 
     # Colors --------------------
@@ -188,11 +188,11 @@ function makewalk {
         main_run $full_path;
     fi
 
-    if is_yes $MAKEWALK_ENABLE_PWD_PRINT; then
-        echo `colorise $highlight_color $(pwd)`;
-    fi
-
     if is_yes $MAKEWALK_ENABLE_PATHS_PRINT; then
         echo $endpaths;
+    fi
+
+    if is_yes $MAKEWALK_ENABLE_PWD_PRINT && not_yes $MAKEWALK_DISABLE_DIRECTORY_ENTER; then
+        echo "PWD: $(colorise $highlight_color $(pwd))";
     fi
 }
