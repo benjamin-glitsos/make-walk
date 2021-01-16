@@ -58,7 +58,7 @@ Or make a path of folders containing multiple files like so:
 m new folder/second folder/new file.txt,.dotfile example,another file.txt
 ```
 
-The console output will be:
+In this case the console output will be:
 
 ```
 $ mkdir -p new-folder/second-folder && cd new-folder/second-folder
@@ -67,7 +67,7 @@ $ touch .dotfile-example && xdg-open .dotfile-example
 $ touch another-file.txt && xdg-open another-file.txt
 ```
 
-The following files and folders will be created:
+And the following files and folders will be created:
 
 ```
 new-folder
