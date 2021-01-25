@@ -113,7 +113,7 @@ export MAKEWALK_COLOR_PWD_PRINT="0;34";
 I personally use the following configuration:
 
 ```bash
-export MAKEWALK_DIRECTORY_ENTER_COMMAND="pushd";
+export MAKEWALK_DIRECTORY_ENTER_COMMAND="pushd > /dev/null";
 export MAKEWALK_FILE_OPEN_COMMAND="vimer";
 export MAKEWALK_ENABLE_PWD="yes";
 export MAKEWALK_ENABLE_PATHS_PRINT="yes";
